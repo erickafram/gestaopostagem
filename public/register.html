@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Sistema de Gestão</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-dark: #0a58ca;
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow-light: 0 4px 15px rgba(0,0,0,0.1);
+            --shadow-heavy: 0 8px 30px rgba(0,0,0,0.15);
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
+        body {
+            background: var(--gradient-bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-heavy);
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-bg);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .register-header .logo {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-bg);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-light);
+        }
+
+        .register-header .logo i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .register-header h1 {
+            color: #333;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-bg);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .register-header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .form-floating {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-floating input {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 1rem 3rem 1rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(248, 249, 250, 0.8);
+        }
+
+        .form-floating input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+            background: white;
+        }
+
+        .form-floating input.is-valid {
+            border-color: var(--success-color);
+        }
+
+        .form-floating input.is-invalid {
+            border-color: var(--danger-color);
+        }
+
+        .form-floating label {
+            padding-left: 1rem;
+            color: #666;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            z-index: 10;
+        }
+
+        .password-toggle {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: var(--danger-color); width: 25%; }
+        .strength-medium { background: var(--warning-color); width: 50%; }
+        .strength-strong { background: var(--success-color); width: 75%; }
+        .strength-very-strong { background: var(--success-color); width: 100%; }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin: 0.25rem 0;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .requirement.met {
+            color: var(--success-color);
+        }
+
+        .requirement i {
+            width: 16px;
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--gradient-bg);
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-loading {
+            pointer-events: none;
+        }
+
+        .spinner-border {
+            width: 1.2rem;
+            height: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .terms-agreement {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(248, 249, 250, 0.5);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .login-link {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(248, 249, 250, 0.5);
+            border-radius: 15px;
+            margin-top: 1.5rem;
+        }
+
+        .login-link p {
+            margin: 0;
+            color: #666;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-link a:hover {
+            opacity: 0.8;
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: white;
+        }
+
+        .progress-container {
+            margin: 1.5rem 0;
+            display: none;
+        }
+
+        .registration-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+        }
+
+        .progress-step.active::before {
+            background: var(--primary-color);
+        }
+
+        .progress-step.completed::before {
+            background: var(--success-color);
+        }
+
+        /* Animações */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .register-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Responsividade */
+        @media (max-width: 576px) {
+            .register-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .register-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1>Criar Conta</h1>
+            <p>Preencha os dados para se registrar</p>
+        </div>
+        
+        <div class="alert alert-danger" id="errorAlert" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <span id="errorMessage"></span>
+        </div>
+        
+        <div class="alert alert-success" id="successAlert" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span id="successMessage"></span>
+        </div>
+        
+        <form id="registerForm">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="name" placeholder="Digite seu nome completo" required>
+                <label for="name">Nome Completo</label>
+                <i class="fas fa-user input-icon"></i>
+            </div>
+            
+            <div class="form-floating">
+                <input type="email" class="form-control" id="email" placeholder="Digite seu email" required>
+                <label for="email">Email</label>
+                <i class="fas fa-envelope input-icon"></i>
+            </div>
+            
+            <div class="form-floating">
+                <input type="text" class="form-control" id="phone" placeholder="Digite seu telefone" required>
+                <label for="phone">Telefone</label>
+                <i class="fas fa-phone input-icon"></i>
+            </div>
+            
+            <div class="form-floating">
+                <input type="password" class="form-control" id="password" placeholder="Digite sua senha" required>
+                <label for="password">Senha</label>
+                <i class="fas fa-eye input-icon password-toggle" id="togglePassword"></i>
+            </div>
+            
+            <div class="password-strength" id="passwordStrength" style="display: none;">
+                <div class="strength-bar">
+                    <div class="strength-fill" id="strengthFill"></div>
+                </div>
+                <span id="strengthText">Digite uma senha</span>
+            </div>
+            
+            <div class="password-requirements" id="passwordRequirements" style="display: none;">
+                <div class="requirement" id="lengthReq">
+                    <i class="fas fa-times"></i>
+                    <span>Mínimo 8 caracteres</span>
+                </div>
+                <div class="requirement" id="upperReq">
+                    <i class="fas fa-times"></i>
+                    <span>Uma letra maiúscula</span>
+                </div>
+                <div class="requirement" id="lowerReq">
+                    <i class="fas fa-times"></i>
+                    <span>Uma letra minúscula</span>
+                </div>
+                <div class="requirement" id="numberReq">
